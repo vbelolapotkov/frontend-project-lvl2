@@ -4,6 +4,9 @@
   "description": "Diff generator tool",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "gendiff": "bin/gendiff.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -23,6 +26,9 @@
     "url": "https://github.com/vbelolapotkov/frontend-project-lvl2/issues"
   },
   "homepage": "https://github.com/vbelolapotkov/frontend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^6.1.0"
+  },
   "devDependencies": {
     "eslint": "^7.8.1",
     "eslint-config-airbnb-base": "^14.2.0",
