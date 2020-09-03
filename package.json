@@ -1,0 +1,26 @@
+{
+  "name": "@vb11-hexlet/frontend-project-lvl2",
+  "version": "1.0.0",
+  "description": "Diff generator tool",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vbelolapotkov/frontend-project-lvl2.git"
+  },
+  "keywords": [
+    "hexlet",
+    "frontend",
+    "js",
+    "cli"
+  ],
+  "author": "Vasily Belolapotkov <belolapotkov.v@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vbelolapotkov/frontend-project-lvl2/issues"
+  },
+  "homepage": "https://github.com/vbelolapotkov/frontend-project-lvl2#readme"
+}
