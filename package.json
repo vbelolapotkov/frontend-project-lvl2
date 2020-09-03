@@ -22,5 +22,12 @@
   "bugs": {
     "url": "https://github.com/vbelolapotkov/frontend-project-lvl2/issues"
   },
-  "homepage": "https://github.com/vbelolapotkov/frontend-project-lvl2#readme"
+  "homepage": "https://github.com/vbelolapotkov/frontend-project-lvl2#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "prettier": "^2.1.1"
+  }
 }

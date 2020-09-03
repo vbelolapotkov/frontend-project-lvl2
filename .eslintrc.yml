@@ -1,0 +1,12 @@
+plugins:
+  - import
+
+env:
+  node: true
+
+extends:
+  - 'airbnb-base'
+  - 'prettier'
+
+rules:
+  import/extensions: 0
