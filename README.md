@@ -2,3 +2,31 @@
 ![CI](https://github.com/vbelolapotkov/frontend-project-lvl2/workflows/CI/badge.svg)
 
 # frontend-project-lvl2
+
+Library for generating diff of two config files.
+
+## Installation
+
+Run following commands in terminal to install:
+
+```bash
+git clone https://github.com/vbelolapotkov/frontend-project-lvl2.git ./gen-diff
+cd gen-diff
+npm install --production
+npm link
+```
+
+## Usage
+
+```
+gendiff [options] <filepath1> <filepath2>
+
+Options:
+  -V, --version        output the version number
+  -f, --format [type]  output format
+  -h, --help           output usage information
+```
+
+## Demo
+
+[![asciicast](https://asciinema.org/a/8OS1XRd7BLmXTgdpPvlMt6WiO.svg)](https://asciinema.org/a/8OS1XRd7BLmXTgdpPvlMt6WiO)
