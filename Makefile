@@ -7,3 +7,6 @@ publish:
 
 lint:
 	npx eslint .
+
+test:
+	npm test
