@@ -2,7 +2,7 @@
   "name": "@vb11-hexlet/frontend-project-lvl2",
   "version": "1.0.0",
   "description": "Diff generator tool",
-  "main": "index.js",
+  "main": "src/index.js",
   "type": "module",
   "bin": {
     "gendiff": "bin/gendiff.js"
