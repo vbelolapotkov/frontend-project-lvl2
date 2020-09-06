@@ -1,5 +1,7 @@
-install:
-	npm install
+install: install-deps
+
+install-deps:
+	npm ci
 
 # Using dry-run to avoid real publishing of this demo package
 publish:
@@ -10,3 +12,6 @@ lint:
 
 test:
 	npm test
+
+test-coverage:
+	npm test -- --coverage --coverageProvider=v8
