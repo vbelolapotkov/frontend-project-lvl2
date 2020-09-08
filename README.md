@@ -30,4 +30,4 @@ Options:
 
 ## Demo
 
-[![asciicast](https://asciinema.org/a/v7SW2Fez2klqqRWITRgzzGNXx.svg)](https://asciinema.org/a/v7SW2Fez2klqqRWITRgzzGNXx)
+[![asciicast](https://asciinema.org/a/HrXcyKLWdejNAxveCvqoATbug.svg)](https://asciinema.org/a/HrXcyKLWdejNAxveCvqoATbug)
