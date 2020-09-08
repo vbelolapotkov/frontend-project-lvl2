@@ -1,19 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-import yaml from 'js-yaml';
-
-const configParsers = {
-  '.yml': yaml.safeLoad,
-  default: JSON.parse,
-};
-
-function readConfigFromFile(filepath) {
-  const absPath = path.resolve(process.cwd(), filepath);
-  const format = path.extname(absPath);
-  const fileContent = fs.readFileSync(absPath);
-  const parse = typeof configParsers[format] === 'function' ? configParsers[format] : configParsers.default;
-  return parse(fileContent);
-}
+import readConfigFromFile from './parsers.js';
 
 function genObjectsDiff(obj1, obj2) {
   const uniqKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
