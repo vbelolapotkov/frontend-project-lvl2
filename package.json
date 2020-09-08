@@ -27,7 +27,8 @@
   },
   "homepage": "https://github.com/vbelolapotkov/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^6.1.0"
+    "commander": "^6.1.0",
+    "js-yaml": "^3.14.0"
   },
   "devDependencies": {
     "eslint": "^7.8.1",

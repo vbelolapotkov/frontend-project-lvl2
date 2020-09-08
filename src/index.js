@@ -1,10 +1,18 @@
 import fs from 'fs';
 import path from 'path';
+import yaml from 'js-yaml';
 
-function readJsonFile(filepath) {
+const configParsers = {
+  '.yml': yaml.safeLoad,
+  default: JSON.parse,
+};
+
+function readConfigFromFile(filepath) {
   const absPath = path.resolve(process.cwd(), filepath);
+  const format = path.extname(absPath);
   const fileContent = fs.readFileSync(absPath);
-  return JSON.parse(fileContent);
+  const parse = typeof configParsers[format] === 'function' ? configParsers[format] : configParsers.default;
+  return parse(fileContent);
 }
 
 function genObjectsDiff(obj1, obj2) {
@@ -32,9 +40,9 @@ function genObjectsDiff(obj1, obj2) {
 }
 
 export default function genDiff(filepath1, filepath2) {
-  const json1 = readJsonFile(filepath1);
-  const json2 = readJsonFile(filepath2);
+  const config1 = readConfigFromFile(filepath1);
+  const config2 = readConfigFromFile(filepath2);
 
-  const diffLines = genObjectsDiff(json1, json2);
+  const diffLines = genObjectsDiff(config1, config2);
   return diffLines.join('\n');
 }
