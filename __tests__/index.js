@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path'
 import genDiff from '../src/index.js';
 
-const formats = ['json', 'yml'];
+const formats = ['json', 'yml', 'ini'];
 describe('genDiff', () => {
   let expectedDiff;
 
