@@ -3,26 +3,29 @@ import fs from 'fs';
 import path from 'path'
 import genDiff from '../src/index.js';
 
-test('plain json diff', () => {
-  const diff = genDiff('./__fixtures__/file1.json', './__fixtures__/file2.json');
-  expect(diff).toMatchSnapshot();
+const formats = ['json', 'yml'];
+describe('genDiff', () => {
+  let expectedDiff;
 
-  const diffAbs = genDiff(
-    path.resolve(fixturesPath, './file1.json'),
-    path.resolve(fixturesPath, './file2.json')
-  );
-  expect(diff).toBe(diffAbs);
-});
+  beforeAll(() => {
+    expectedDiff = fs.readFileSync(
+      path.resolve(fixturesPath, './plain_diff.txt'),
+      'utf-8'
+    );
+  });
 
-test('plain yaml diff', () => {
-  const expectedDiff = fs.readFileSync(path.resolve(fixturesPath, './plain_diff.txt'), 'utf-8');
+  test.each(formats)('diff for plain %s file', (format) => {
+    const diff = genDiff(
+      `./__fixtures__/file1.${format}`,
+      `./__fixtures__/file2.${format}`
+    );
 
-  const diff = genDiff( './__fixtures__/file1.yml', './__fixtures__/file2.yml' );
-  expect(diff).toEqual(expectedDiff);
+    expect(diff).toBe(expectedDiff);
 
-  const diffAbs = genDiff(
-    path.resolve(fixturesPath, './file1.yml'),
-    path.resolve(fixturesPath, './file2.yml')
-  );
-  expect(diffAbs).toEqual(expectedDiff);
+    const diffAbs = genDiff(
+      path.resolve(fixturesPath, `./file1.${format}`),
+      path.resolve(fixturesPath, `./file2.${format}`)
+    );
+    expect(diffAbs).toBe(expectedDiff);
+  });
 });
