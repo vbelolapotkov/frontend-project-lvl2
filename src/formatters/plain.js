@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 function valueToString(value) {
-  if ( _.isObject(value) ) {
+  if (_.isObject(value)) {
     return '[complex value]';
   }
 
@@ -11,34 +11,57 @@ function valueToString(value) {
   return value.toString();
 }
 
-function flatten (diff, path = []) {
-  const diffs = [];
-  if (diff.key && diff.prevValue !== diff.nextValue) {
-    diffs.push({ diff, path: [...path, diff.key] });
+function composeChangeLine({ change, key, value, fromValue, toValue }) {
+  if (change === 'added') {
+    return `Property '${key}' was added with value: ${valueToString(value)}`;
   }
 
-  if (diff.children && diff.children.length > 0) {
-    const newPath = diff.key ? [...path, diff.key] : path;
-    diffs.push(...diff.children.flatMap((child) => flatten(child, newPath)));
+  if (change === 'removed') {
+    return `Property '${key}' was removed`;
   }
-  return diffs;
-};
 
-function composeDiffLines(diffTree) {
-  const flatDiff = flatten(diffTree);
-
-  return flatDiff.map(({ diff, path }) => {
-    const propertyPath = path.join('.');
-    if (diff.prevValue === undefined && diff.nextValue !== undefined) {
-      return `Property '${propertyPath}' was added with value: ${valueToString(diff.nextValue)}`;
-    }
-
-    if (diff.prevValue !== undefined && diff.nextValue === undefined) {
-      return `Property '${propertyPath}' was removed`;
-    }
-
-    return `Property '${propertyPath}' was updated. From ${valueToString(diff.prevValue)} to ${valueToString(diff.nextValue)}`;
-  });
+  return `Property '${key}' was updated. From ${valueToString(
+    fromValue
+  )} to ${valueToString(toValue)}`;
 }
 
-export default (diff) => composeDiffLines(diff).join('\n');
+function flatten(diff, path = []) {
+  if (!diff.key) {
+    return [...diff.children.flatMap((child) => flatten(child, path))];
+  }
+
+  const currentPath = [...path, diff.key];
+
+  if (diff.children && diff.children.length > 0) {
+    return [...diff.children.flatMap((child) => flatten(child, currentPath))];
+  }
+
+  const pathKey = currentPath.join('.');
+
+  if (diff.prevValue === undefined && diff.nextValue !== undefined) {
+    return [{ key: pathKey, change: 'added', value: diff.nextValue }];
+  }
+
+  if (diff.prevValue !== undefined && diff.nextValue === undefined) {
+    return [{ key: pathKey, change: 'removed', value: diff.prevValue }];
+  }
+
+  if (diff.prevValue === diff.nextValue) {
+    return [{ key: pathKey, change: 'none', value: diff.prevValue }];
+  }
+
+  return [
+    {
+      key: pathKey,
+      change: 'updated',
+      fromValue: diff.prevValue,
+      toValue: diff.nextValue,
+    },
+  ];
+}
+
+export default (diff) =>
+  flatten(diff)
+    .filter(({ change }) => change !== 'none')
+    .map(composeChangeLine)
+    .join('\n');

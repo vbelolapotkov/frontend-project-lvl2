@@ -1,56 +1,60 @@
 import _ from 'lodash';
 
-const getNextIndent = (indent, key) => {
-  const indentStep = '  ';
-  return key ? `${indent}  ${indentStep}` : indent + indentStep;
-};
+const getIndent = path => '    '.repeat(path.length);
+const setIndent = (str, path) => _.padStart(str, getIndent(path).length);
 
-const composeDiffValueLines = (indent, key, value, diffSymbol = ' ') => {
+const composeDiffValueLines = (path, value, diffSymbol = '  ') => {
+  const key = _.last(path);
+  const indent = setIndent(diffSymbol, path);
   return _.isPlainObject(value)
     ? [
-        `${indent}${diffSymbol} ${key}: {`,
+        `${indent}${key}: {`,
         ...Object.keys(value).flatMap((objectKey) =>
           composeDiffValueLines(
-            getNextIndent(indent, objectKey),
-            objectKey,
-            value[objectKey],
+            [...path, objectKey],
+            value[objectKey]
           )
         ),
-        `${indent}  }`,
+        `${getIndent(path)}}`,
       ]
-    : [`${indent}${diffSymbol} ${key}: ${value}`];
+    : [`${indent}${key}: ${value}`];
 };
 
-const composeDiffLines = (diff, indent = '') => {
-  if (diff.children && diff.children.length > 0) {
-    const keyString = diff.key ? `  ${diff.key}: ` : '';
-    const nextIndent = getNextIndent(indent, diff.key);
+const composeDiffLines = (diff, path = []) => {
+  if (!diff.key) {
     return [
-      `${indent}${keyString}{`,
-      ...diff.children.flatMap((child) => composeDiffLines(child, nextIndent)),
-      `${indent}${keyString.length ? '  ' : ''}}`,
+      `${getIndent(path)}{`,
+      ...diff.children.flatMap((child) => composeDiffLines(child, path)),
+      `${getIndent(path)}}`,
+    ];
+  }
+
+  const currentPath = [...path, diff.key];
+
+  if (diff.children && diff.children.length > 0) {
+    return [
+      `${getIndent(currentPath)}${diff.key}: {`,
+      ...diff.children.flatMap((child) => composeDiffLines(child, currentPath)),
+      `${getIndent(currentPath)}}`,
     ];
   }
 
   if (diff.prevValue === undefined && diff.nextValue !== undefined) {
-    return composeDiffValueLines(indent, diff.key, diff.nextValue, '+');
+    return composeDiffValueLines(currentPath, diff.nextValue, '+ ');
   }
 
   if (diff.prevValue !== undefined && diff.nextValue === undefined) {
-    return composeDiffValueLines(indent, diff.key, diff.prevValue, '-');
+    return composeDiffValueLines(currentPath, diff.prevValue, '- ');
   }
 
-  if (diff.prevValue !== diff.nextValue) {
-    return [
-      ...composeDiffValueLines(indent, diff.key, diff.prevValue, '-'),
-      ...composeDiffValueLines(indent, diff.key, diff.nextValue, '+'),
-    ];
+  if (diff.prevValue === diff.nextValue) {
+    return composeDiffValueLines(currentPath, diff.prevValue);
   }
 
-  return `${indent}  ${diff.key}: ${diff.prevValue}`;
+  return [
+    ...composeDiffValueLines(currentPath, diff.prevValue, '- '),
+    ...composeDiffValueLines(currentPath, diff.nextValue, '+ '),
+  ];
 };
 
-export default function stylish(diff) {
-  const lines = composeDiffLines(diff);
-  return lines.join('\n');
-}
+export default (diff) => composeDiffLines(diff).join('\n');

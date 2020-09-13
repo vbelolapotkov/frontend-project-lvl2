@@ -1,16 +1,12 @@
 function flatten(diff, path = []) {
-  const diffs = [];
-
   if (!diff.key) {
-    diffs.push(...diff.children.flatMap(child => flatten(child, path)));
-    return diffs;
+    return [...diff.children.flatMap((child) => flatten(child, path))];
   }
 
   const currentPath = [...path, diff.key];
 
-  if (diff.prevValue === undefined && diff.nextValue === undefined) {
-    diffs.push(...diff.children.flatMap((child) => flatten(child, currentPath)));
-    return diffs;
+  if (diff.children && diff.children.length > 0) {
+    return [...diff.children.flatMap((child) => flatten(child, currentPath))];
   }
 
   const pathKey = currentPath.join('.');
@@ -27,7 +23,14 @@ function flatten(diff, path = []) {
     return [{ key: pathKey, change: 'none', value: diff.prevValue }];
   }
 
-  return [{ key: pathKey, change: 'updated', fromValue: diff.prevValue, toValue: diff.nextValue }];
+  return [
+    {
+      key: pathKey,
+      change: 'updated',
+      fromValue: diff.prevValue,
+      toValue: diff.nextValue,
+    },
+  ];
 }
 
 export default (diff) => JSON.stringify(flatten(diff));
