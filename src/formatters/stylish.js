@@ -1,6 +1,5 @@
 import _ from 'lodash';
 
-
 const getNextIndent = (indent, key) => {
   const indentStep = '  ';
   return key ? `${indent}  ${indentStep}` : indent + indentStep;

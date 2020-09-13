@@ -1,4 +1,5 @@
 import _ from 'lodash';
+
 function valueToString(value) {
   if ( _.isObject(value) ) {
     return '[complex value]';
@@ -23,8 +24,8 @@ function flatten (diff, path = []) {
   return diffs;
 };
 
-function composeDiffLines(diff) {
-  const flatDiff = flatten(diff);
+function composeDiffLines(diffTree) {
+  const flatDiff = flatten(diffTree);
 
   return flatDiff.map(({ diff, path }) => {
     const propertyPath = path.join('.');
@@ -36,9 +37,7 @@ function composeDiffLines(diff) {
       return `Property '${propertyPath}' was removed`;
     }
 
-    if (diff.prevValue !== diff.nextValue) {
-      return `Property '${propertyPath}' was updated. From ${valueToString(diff.prevValue)} to ${valueToString(diff.nextValue)}`;
-    }
+    return `Property '${propertyPath}' was updated. From ${valueToString(diff.prevValue)} to ${valueToString(diff.nextValue)}`;
   });
 }
 
