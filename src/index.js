@@ -1,66 +1,9 @@
 import _ from 'lodash';
 import readConfigFromFile from './parsers.js';
+import stylish from './formatters';
 
-function isObject (variable) {
-  return  typeof variable === 'object' && variable !== null && ! Array.isArray(variable);
-}
-
-function stylish(diff) {
-  const indentStep = '  ';
-  const diffTypeSymbols = {
-    added: '+',
-    removed: '-',
-    same: ' ',
-  };
-  const getLines = (diff, indent) => {
-    const diffLines = []
-    let line = indent;
-
-    const diffTypeStr = diff.diffType && diffTypeSymbols[diff.diffType] ? `${diffTypeSymbols[diff.diffType]} ` : ''
-
-    line += diffTypeStr;
-
-    if ( diff.value !== undefined && !isObject(diff.value) ) {
-      line += `${diff.key}: ${diff.value}`;
-      diffLines.push(line);
-      return diffLines;
-    }
-
-    if (diff.key) {
-      line+= `${diff.key}: `
-    }
-    line += '{';
-    diffLines.push(line);
-
-    const nextIndent = _.padStart(
-      indent,
-      indent.length + indentStep.length + diffTypeStr.length
-    );
-
-    if (isObject(diff.value)) {
-      diffLines.push(
-        ...Object.keys(diff.value).flatMap(key => getLines({ key, value: diff.value[key], diffType: 'same' }, nextIndent))
-      );
-    }
-
-    if (diff.children && diff.children.length > 0) {
-      diffLines.push(
-        ...diff.children.flatMap((child) => getLines(child, nextIndent))
-      );
-    }
-
-    const closingIndent = _.padStart(
-      indent,
-      indent.length + diffTypeStr.length
-    );
-    diffLines.push(`${closingIndent}}`);
-
-    return diffLines;
-  }
-
-  const lines = getLines(diff, '');
-  return lines.join('\n');
-}
+// Node ES modules does not support named exports from lodash.
+const { isPlainObject } = _;
 
 const getObjectsDiff = (obj1, obj2) => {
   const uniqKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
@@ -79,7 +22,7 @@ const getObjectsDiff = (obj1, obj2) => {
       ];
     }
 
-    if (isObject(value1) && isObject(value2)) {
+    if (isPlainObject(value1) && isPlainObject(value2)) {
       return {
         key,
         diffType: 'same',
