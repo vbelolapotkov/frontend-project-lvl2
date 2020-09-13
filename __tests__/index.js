@@ -56,4 +56,6 @@ describe('genDiff', () => {
 
     expect(diff).toBe(diffPlain);
   } )
+
+  test.todo('throws when format is unknown')
 });

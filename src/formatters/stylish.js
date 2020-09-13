@@ -3,7 +3,7 @@ import _ from 'lodash';
 // Node ES modules does not support named exports from lodash.
 const { isPlainObject, padStart } = _;
 
-const composeDiffTypeStr = diffType => {
+const composeDiffTypeStr = (diffType) => {
   const diffTypeSymbols = {
     added: '+',
     removed: '-',
@@ -13,8 +13,7 @@ const composeDiffTypeStr = diffType => {
   return diffType && diffTypeSymbols[diffType]
     ? `${diffTypeSymbols[diffType]} `
     : '';
-
-}
+};
 
 const composeDiffLines = (diff, indent) => {
   const indentStep = '  ';
@@ -43,7 +42,10 @@ const composeDiffLines = (diff, indent) => {
   if (isPlainObject(diff.value)) {
     diffLines.push(
       ...Object.keys(diff.value).flatMap((key) =>
-        composeDiffLines({ key, value: diff.value[key], diffType: 'same' }, nextIndent)
+        composeDiffLines(
+          { key, value: diff.value[key], diffType: 'same' },
+          nextIndent
+        )
       )
     );
   }
