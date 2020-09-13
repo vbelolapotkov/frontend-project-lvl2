@@ -19,7 +19,7 @@ npm link
 
 ## Usage
 
-```
+```bash
 gendiff [options] <filepath1> <filepath2>
 
 Options:
@@ -30,4 +30,10 @@ Options:
 
 ## Demo
 
+**Plain objects demo**
+
 [![asciicast](https://asciinema.org/a/HrXcyKLWdejNAxveCvqoATbug.svg)](https://asciinema.org/a/HrXcyKLWdejNAxveCvqoATbug)
+
+**Nested objects demo**
+
+[![asciicast](https://asciinema.org/a/cCITHb4VqEpUjgomK3A3Q8iM5.svg)](https://asciinema.org/a/cCITHb4VqEpUjgomK3A3Q8iM5)
