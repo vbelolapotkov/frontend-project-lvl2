@@ -57,6 +57,17 @@ describe('genDiff', () => {
     expect(diff).toBe(diffPlain);
   } );
 
+  test('diff for nested files in json format', () => {
+    const expectedDiff = JSON.stringify(readFixtureFile('diff_json.json'));
+    const diff = genDiff(
+      './__fixtures__/file3.json',
+      './__fixtures__/file4.json',
+      'json'
+    );
+
+    expect(diff).toBe(expectedDiff);
+  } );
+
   test('throws when format is unknown', () => {
     const f = () => genDiff(
       './__fixtures__/file3.json',

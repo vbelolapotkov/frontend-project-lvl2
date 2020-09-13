@@ -1,0 +1,94 @@
+[
+  {
+    "key": "common.follow",
+    "change": "added",
+    "value": false
+  },
+  {
+    "key": "common.setting1",
+    "change": "none",
+    "value": "Value 1"
+  },
+  {
+    "key": "common.setting2",
+    "change": "removed",
+    "value": 200
+  },
+  {
+    "key": "common.setting3",
+    "change": "updated",
+    "fromValue": true,
+    "toValue": {
+      "key": "value"
+    }
+  },
+  {
+    "key": "common.setting4",
+    "change": "added",
+    "value": "blah blah"
+  },
+  {
+    "key": "common.setting5",
+    "change": "added",
+    "value": {
+      "key5": "value5"
+    }
+  },
+  {
+    "key": "common.setting6.doge",
+    "change": "updated",
+    "fromValue": "too much",
+    "toValue": "so much"
+  },
+  {
+    "key": "common.setting6.key",
+    "change": "none",
+    "value": "value"
+  },
+  {
+    "key": "common.setting6.ops",
+    "change": "added",
+    "value": "vops"
+  },
+  {
+    "key": "group1.baz",
+    "change": "updated",
+    "fromValue": "bas",
+    "toValue": "bars"
+  },
+  {
+    "key": "group1.foo",
+    "change": "none",
+    "value": "bar"
+  },
+  {
+    "key": "group1.nest",
+    "change": "updated",
+    "fromValue": {
+      "key": "value"
+    },
+    "toValue": "str"
+  },
+  {
+    "key": "group2",
+    "change": "removed",
+    "value": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    }
+  },
+  {
+    "key": "group3",
+    "change": "added",
+    "value": {
+      "fee": 100500,
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      }
+    }
+  }
+]
