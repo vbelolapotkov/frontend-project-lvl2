@@ -30,8 +30,8 @@ describe('genDiff', () => {
     expect(diffAbs).toBe(plainDiff);
   });
 
-  test('diff for nested json files', () => {
-    const stylishDiff = readFixtureFile('nested_diff.txt')
+  test('diff for nested files in stylish format', () => {
+    const stylishDiff = readFixtureFile('diff_stylish.txt')
     const diff = genDiff(
       './__fixtures__/file3.json',
       './__fixtures__/file4.json'
