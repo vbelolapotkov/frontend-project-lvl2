@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import readConfigFromFile from './parsers.js';
-import stylish from './formatters';
+import stylish from './formatters.js';
 
 // Node ES modules does not support named exports from lodash.
 const { isPlainObject } = _;
