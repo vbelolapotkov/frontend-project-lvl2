@@ -1,5 +1,5 @@
 /* globals fixturesPath */
-import fs, { read } from 'fs';
+import fs from 'fs';
 import path from 'path'
 import genDiff from '../src/index.js';
 
