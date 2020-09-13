@@ -37,3 +37,7 @@ Options:
 **Nested objects demo**
 
 [![asciicast](https://asciinema.org/a/cCITHb4VqEpUjgomK3A3Q8iM5.svg)](https://asciinema.org/a/cCITHb4VqEpUjgomK3A3Q8iM5)
+
+**Plain output format demo**
+
+[![asciicast](https://asciinema.org/a/OscR69iBL2vHrQcufiVam6ssT.svg)](https://asciinema.org/a/OscR69iBL2vHrQcufiVam6ssT)
