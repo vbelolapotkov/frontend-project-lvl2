@@ -29,6 +29,9 @@ const getObjectsDiff = (obj1, obj2) => {
 
 export default function genDiff(filepath1, filepath2, format = 'stylish') {
   const formatDiff = formatters[format];
+  if ( typeof formatDiff !== 'function') {
+    throw new Error(`Unsupported format '${format}'`);
+  }
 
   const config1 = readConfigFromFile(filepath1);
   const config2 = readConfigFromFile(filepath2);

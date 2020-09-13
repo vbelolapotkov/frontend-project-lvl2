@@ -55,7 +55,15 @@ describe('genDiff', () => {
     );
 
     expect(diff).toBe(diffPlain);
-  } )
+  } );
 
-  test.todo('throws when format is unknown')
+  test('throws when format is unknown', () => {
+    const f = () => genDiff(
+      './__fixtures__/file3.json',
+      './__fixtures__/file4.json',
+      'wrong-format'
+    );
+
+    expect(f).toThrow("Unsupported format 'wrong-format'");
+  } );
 });
