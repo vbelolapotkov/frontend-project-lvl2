@@ -41,3 +41,7 @@ Options:
 **Plain output format demo**
 
 [![asciicast](https://asciinema.org/a/OscR69iBL2vHrQcufiVam6ssT.svg)](https://asciinema.org/a/OscR69iBL2vHrQcufiVam6ssT)
+
+**JSON output format demo**
+
+[![asciicast](https://asciinema.org/a/MZ3kqjhHMIu6OAsyKD3DfqTWU.svg)](https://asciinema.org/a/MZ3kqjhHMIu6OAsyKD3DfqTWU)
