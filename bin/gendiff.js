@@ -11,8 +11,8 @@ program
   .option('-f, --format [type]', 'output format')
   .helpOption('-h, --help', 'output usage information')
   .arguments('<filepath1> <filepath2>')
-  .action((filepath1, filepath2) => {
+  .action((filepath1, filepath2, options) => {
     // eslint-disable-next-line no-console
-    console.log(genDiff(filepath1, filepath2));
+    console.log(genDiff(filepath1, filepath2, options.format));
   })
   .parse(process.argv);
