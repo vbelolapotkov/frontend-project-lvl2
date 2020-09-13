@@ -8,12 +8,10 @@ const formats = ['json', 'yml', 'ini'];
 const readFixtureFile = fileName => fs.readFileSync(path.resolve(fixturesPath, fileName), 'utf-8');
 
 describe('genDiff', () => {
-  let plaindDiff;
-  let nestedDiff;
+  let plainDiff;
 
   beforeAll(() => {
-    plaindDiff = readFixtureFile('plain_diff.txt');
-    nestedDiff = readFixtureFile('nested_diff.txt')
+    plainDiff = readFixtureFile('plain_diff.txt');
   });
 
 
@@ -23,27 +21,39 @@ describe('genDiff', () => {
       `./__fixtures__/file2.${format}`
     );
 
-    expect(diff).toBe(plaindDiff);
+    expect(diff).toBe(plainDiff);
 
     const diffAbs = genDiff(
       path.resolve(fixturesPath, `./file1.${format}`),
       path.resolve(fixturesPath, `./file2.${format}`)
     );
-    expect(diffAbs).toBe(plaindDiff);
+    expect(diffAbs).toBe(plainDiff);
   });
 
   test('diff for nested json files', () => {
+    const stylishDiff = readFixtureFile('nested_diff.txt')
     const diff = genDiff(
       './__fixtures__/file3.json',
       './__fixtures__/file4.json'
     );
 
-    expect(diff).toBe(nestedDiff);
+    expect(diff).toBe(stylishDiff);
 
     const diffAbs = genDiff(
       path.resolve(fixturesPath, './file3.json'),
       path.resolve(fixturesPath, './file4.json')
     );
-    expect(diffAbs).toBe(nestedDiff);
+    expect(diffAbs).toBe(stylishDiff);
   });
+
+  test('diff for nested files in plain format', () => {
+    const diffPlain = readFixtureFile('diff_plain.txt');
+    const diff = genDiff(
+      './__fixtures__/file3.json',
+      './__fixtures__/file4.json',
+      'plain'
+    );
+
+    expect(diff).toBe(diffPlain);
+  } )
 });
