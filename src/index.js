@@ -62,63 +62,59 @@ function stylish(diff) {
   return lines.join('\n');
 }
 
-function genDiffTree(obj1, obj2) {
-  const getObjectsDiff = (obj1, obj2) => {
-    const objectsDiff = [];
-    const uniqKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
-    const sortedKeys = Array.from(uniqKeys.values()).sort();
-    sortedKeys.forEach((key) => {
-      const value1 = obj1[key];
-      const value2 = obj2[key];
-      if (value1 === value2) {
-        objectsDiff.push({
+const getObjectsDiff = (obj1, obj2) => {
+  const uniqKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
+  const sortedKeys = Array.from(uniqKeys.values()).sort();
+  return sortedKeys.flatMap((key) => {
+    const value1 = obj1[key];
+    const value2 = obj2[key];
+
+    if (value1 === value2) {
+      return [
+        {
           key,
           value: value1,
           diffType: 'same',
-        });
-        return;
-      }
+        },
+      ];
+    }
 
-      if (isObject(value1) && isObject(value2)) {
-        objectsDiff.push({
-          key,
-          diffType: 'same',
-          children: getObjectsDiff(value1, value2),
-        })
-      } else {
-        if (value1 !== undefined) {
-          objectsDiff.push({
-            key,
-            value: value1,
-            diffType: 'removed',
-          });
-        }
+    if (isObject(value1) && isObject(value2)) {
+      return {
+        key,
+        diffType: 'same',
+        children: getObjectsDiff(value1, value2),
+      };
+    }
 
-        if (value2 !== undefined) {
-          objectsDiff.push({
-            key,
-            value: value2,
-            diffType: 'added',
-          });
-        }
-      }
-    });
+    const keyDiff = [];
 
+    if (value1 !== undefined) {
+      keyDiff.push({
+        key,
+        value: value1,
+        diffType: 'removed',
+      });
+    }
 
-    return objectsDiff;
-  };
+    if (value2 !== undefined) {
+      keyDiff.push({
+        key,
+        value: value2,
+        diffType: 'added',
+      });
+    }
 
-  const diff = {
-    children: getObjectsDiff(obj1, obj2)
-  }
-
-  return diff;
-}
+    return keyDiff;
+  });
+};
 
 export default function genDiff(filepath1, filepath2) {
   const config1 = readConfigFromFile(filepath1);
   const config2 = readConfigFromFile(filepath2);
 
-  const diff = genDiffTree(config1, config2);
+  const diff = {
+    children: getObjectsDiff(config1, config2),
+  };
   return stylish(diff);
 }
