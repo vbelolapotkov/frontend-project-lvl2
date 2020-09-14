@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { getChange } from './utils.js';
 
 const getIndent = path => '    '.repeat(path.length);
 const setIndent = (str, path) => _.padStart(str, getIndent(path).length);
@@ -21,40 +22,33 @@ const composeDiffValueLines = (path, value, diffSymbol = '  ') => {
 };
 
 const composeDiffLines = (diff, path = []) => {
-  if (!diff.key) {
-    return [
-      `${getIndent(path)}{`,
-      ...diff.children.flatMap((child) => composeDiffLines(child, path)),
-      `${getIndent(path)}}`,
-    ];
-  }
-
-  const currentPath = [...path, diff.key];
+  const currentPath = diff.key ? [...path, diff.key] : path;
 
   if (diff.children && diff.children.length > 0) {
+    const keyStr = diff.key ? `${diff.key}: ` : '';
+    const indent = getIndent(currentPath);
     return [
-      `${getIndent(currentPath)}${diff.key}: {`,
+      `${indent}${keyStr}{`,
       ...diff.children.flatMap((child) => composeDiffLines(child, currentPath)),
-      `${getIndent(currentPath)}}`,
+      `${indent}}`,
     ];
   }
 
-  if (diff.prevValue === undefined && diff.nextValue !== undefined) {
-    return composeDiffValueLines(currentPath, diff.nextValue, '+ ');
-  }
+  const change = getChange(diff.prevValue, diff.nextValue);
 
-  if (diff.prevValue !== undefined && diff.nextValue === undefined) {
-    return composeDiffValueLines(currentPath, diff.prevValue, '- ');
+  switch (change) {
+    case 'added':
+      return composeDiffValueLines(currentPath, diff.nextValue, '+ ');
+    case 'removed':
+      return composeDiffValueLines(currentPath, diff.prevValue, '- ');
+    case 'updated':
+      return [
+        ...composeDiffValueLines(currentPath, diff.prevValue, '- '),
+        ...composeDiffValueLines(currentPath, diff.nextValue, '+ '),
+      ];
+    default:
+      return composeDiffValueLines(currentPath, diff.nextValue);
   }
-
-  if (diff.prevValue === diff.nextValue) {
-    return composeDiffValueLines(currentPath, diff.prevValue);
-  }
-
-  return [
-    ...composeDiffValueLines(currentPath, diff.prevValue, '- '),
-    ...composeDiffValueLines(currentPath, diff.nextValue, '+ '),
-  ];
 };
 
 export default (diff) => composeDiffLines(diff).join('\n');
