@@ -21,7 +21,7 @@ function composeChangeLine({ type, key, value, prevValue }) {
     case 'changed':
       return `Property '${key}' was updated. From ${valueToString( prevValue )} to ${valueToString(value)}`;
     default:
-      throw Error(`Unexpected change type ${type}`);
+      throw Error(`Unexpected diff type ${type}`);
   }
 }
 

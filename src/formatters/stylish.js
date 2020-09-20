@@ -46,7 +46,7 @@ const composeDiffLines = (diff, path = []) => {
     case 'unchanged':
       return composeDiffValueLines(currentPath, diff.value);
     default:
-      return [];
+      throw new Error(`Unexpected diff type: ${diff.type}.`);
   }
 };
 
