@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { getChange } from './utils.js';
 
 const getIndent = path => '    '.repeat(path.length);
 const setIndent = (str, path) => _.padStart(str, getIndent(path).length);
@@ -34,20 +33,20 @@ const composeDiffLines = (diff, path = []) => {
     ];
   }
 
-  const change = getChange(diff.prevValue, diff.nextValue);
-
-  switch (change) {
+  switch (diff.type) {
     case 'added':
-      return composeDiffValueLines(currentPath, diff.nextValue, '+ ');
-    case 'removed':
+      return composeDiffValueLines(currentPath, diff.value, '+ ');
+    case 'deleted':
       return composeDiffValueLines(currentPath, diff.prevValue, '- ');
-    case 'updated':
+    case 'changed':
       return [
         ...composeDiffValueLines(currentPath, diff.prevValue, '- '),
-        ...composeDiffValueLines(currentPath, diff.nextValue, '+ '),
+        ...composeDiffValueLines(currentPath, diff.value, '+ '),
       ];
+    case 'unchanged':
+      return composeDiffValueLines(currentPath, diff.value);
     default:
-      return composeDiffValueLines(currentPath, diff.nextValue);
+      return [];
   }
 };
 

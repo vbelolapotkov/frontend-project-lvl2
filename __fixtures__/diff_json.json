@@ -1,78 +1,78 @@
 [
   {
     "key": "common.follow",
-    "change": "added",
+    "type": "added",
     "value": false
   },
   {
     "key": "common.setting1",
-    "change": "none",
+    "type": "unchanged",
     "value": "Value 1"
   },
   {
     "key": "common.setting2",
-    "change": "removed",
-    "value": 200
+    "type": "deleted",
+    "prevValue": 200
   },
   {
     "key": "common.setting3",
-    "change": "updated",
-    "fromValue": true,
-    "toValue": {
+    "type": "changed",
+    "prevValue": true,
+    "value": {
       "key": "value"
     }
   },
   {
     "key": "common.setting4",
-    "change": "added",
+    "type": "added",
     "value": "blah blah"
   },
   {
     "key": "common.setting5",
-    "change": "added",
+    "type": "added",
     "value": {
       "key5": "value5"
     }
   },
   {
     "key": "common.setting6.doge.wow",
-    "change": "updated",
-    "fromValue": "too much",
-    "toValue": "so much"
+    "type": "changed",
+    "prevValue": "too much",
+    "value": "so much"
   },
   {
     "key": "common.setting6.key",
-    "change": "none",
+    "type": "unchanged",
     "value": "value"
   },
   {
     "key": "common.setting6.ops",
-    "change": "added",
+    "type": "added",
     "value": "vops"
   },
   {
     "key": "group1.baz",
-    "change": "updated",
-    "fromValue": "bas",
-    "toValue": "bars"
+    "type": "changed",
+    "prevValue": "bas",
+    "value": "bars"
   },
   {
     "key": "group1.foo",
-    "change": "none",
+    "type": "unchanged",
     "value": "bar"
   },
   {
     "key": "group1.nest",
-    "change": "updated",
-    "fromValue": {
+    "type": "changed",
+    "prevValue": {
       "key": "value"
     },
-    "toValue": "str"
+    "value": "str"
   },
   {
     "key": "group2",
-    "change": "removed",
-    "value": {
+    "type": "deleted",
+    "prevValue": {
       "abc": 12345,
       "deep": {
         "id": 45
@@ -81,7 +81,7 @@
   },
   {
     "key": "group3",
-    "change": "added",
+    "type": "added",
     "value": {
       "fee": 100500,
       "deep": {

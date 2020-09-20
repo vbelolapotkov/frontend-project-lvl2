@@ -12,21 +12,21 @@ function valueToString(value) {
   return value.toString();
 }
 
-function composeChangeLine({ change, key, value, fromValue, toValue }) {
-  switch (change) {
+function composeChangeLine({ type, key, value, prevValue }) {
+  switch (type) {
     case 'added':
       return `Property '${key}' was added with value: ${valueToString(value)}`;
-    case 'removed':
+    case 'deleted':
       return `Property '${key}' was removed`;
-    case 'updated':
-      return `Property '${key}' was updated. From ${valueToString( fromValue )} to ${valueToString(toValue)}`;
+    case 'changed':
+      return `Property '${key}' was updated. From ${valueToString( prevValue )} to ${valueToString(value)}`;
     default:
-      throw Error(`Unexpected change type ${change}`);
+      throw Error(`Unexpected change type ${type}`);
   }
 }
 
 export default (diff) =>
   flatten(diff)
-    .filter(({ change }) => change !== 'none')
+    .filter(({ type }) => type !== 'unchanged')
     .map(composeChangeLine)
     .join('\n');
