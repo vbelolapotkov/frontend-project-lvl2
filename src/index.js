@@ -8,7 +8,7 @@ import formatters from './formatters/index.js';
 const { isPlainObject } = _;
 
 const getDiffType = (previousValue, currentValue) => {
-  if ( previousValue === currentValue ) {
+  if (previousValue === currentValue) {
     return 'unchanged';
   }
 
@@ -21,7 +21,7 @@ const getDiffType = (previousValue, currentValue) => {
   }
 
   return 'changed';
-}
+};
 
 const getObjectsDiff = (obj1, obj2) => {
   const allKeys = Object.keys({ ...obj1, ...obj2 }).sort();
@@ -39,7 +39,7 @@ const getObjectsDiff = (obj1, obj2) => {
     const type = getDiffType(value1, value2);
     const diffNode = { key, type, value: value2 };
 
-    if ( type !== 'unchanged' ) {
+    if (type !== 'unchanged') {
       diffNode.prevValue = value1;
     }
 
@@ -52,11 +52,11 @@ const readConfigFromFile = (filepath) => {
   const format = path.extname(absPath).slice(1); // Use file extension without . as a format.
   const fileContent = fs.readFileSync(absPath, 'utf-8');
   return parseConfig(fileContent, format);
-}
+};
 
 export default function genDiff(filepath1, filepath2, format = 'stylish') {
   const formatDiff = formatters[format];
-  if ( typeof formatDiff !== 'function') {
+  if (typeof formatDiff !== 'function') {
     throw new Error(`Unsupported format '${format}'`);
   }
 
