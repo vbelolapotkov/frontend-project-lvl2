@@ -1,5 +1,7 @@
+import fs from 'fs';
+import path from 'path';
 import _ from 'lodash';
-import readConfigFromFile from './parsers.js';
+import parseConfig from './parsers.js';
 import formatters from './formatters/index.js';
 
 // Node ES modules does not support named exports from lodash.
@@ -26,6 +28,13 @@ const getObjectsDiff = (obj1, obj2) => {
     };
   });
 };
+
+const readConfigFromFile = (filepath) => {
+  const absPath = path.resolve(process.cwd(), filepath);
+  const format = path.extname(absPath).slice(1); // Use file extension without . as a format.
+  const fileContent = fs.readFileSync(absPath, 'utf-8');
+  return parseConfig(fileContent, format);
+}
 
 export default function genDiff(filepath1, filepath2, format = 'stylish') {
   const formatDiff = formatters[format];
