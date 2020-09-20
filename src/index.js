@@ -8,9 +8,8 @@ import formatters from './formatters/index.js';
 const { isPlainObject } = _;
 
 const getObjectsDiff = (obj1, obj2) => {
-  const uniqKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
-  const sortedKeys = Array.from(uniqKeys.values()).sort();
-  return sortedKeys.flatMap((key) => {
+  const allKeys = Object.keys({ ...obj1, ...obj2 }).sort();
+  return allKeys.flatMap((key) => {
     const value1 = obj1[key];
     const value2 = obj2[key];
 
