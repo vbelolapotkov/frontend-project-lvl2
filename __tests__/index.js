@@ -1,12 +1,10 @@
 /* globals fixturesPath */
 import fs from 'fs';
-import path from 'path'
+import path from 'path';
 import genDiff from '../src/index.js';
 
-const formats = ['json', 'yml', 'ini'];
-
-const getFixturePath = fileName => path.resolve(fixturesPath, fileName);
-const readFixtureFile = fileName => fs.readFileSync(getFixturePath(fileName), 'utf-8');
+const getFixturePath = (fileName) => path.resolve(fixturesPath, fileName);
+const readFixtureFile = (fileName) => fs.readFileSync(getFixturePath(fileName), 'utf-8');
 
 describe('genDiff', () => {
   let plainDiff;
@@ -15,14 +13,38 @@ describe('genDiff', () => {
     plainDiff = readFixtureFile('plain_diff.txt');
   });
 
-  test.each(formats)('diff for plain %s files', (format) => {
-    const diffAbs = genDiff(
-      getFixturePath(`file1.${format}`),
-      getFixturePath(`file2.${format}`),
-    );
-    expect(diffAbs).toBe(plainDiff);
-  });
+  test.each(['json', 'yml', 'ini'])(
+    'should generate diff for plain %s files',
+    (fileFormat) => {
+      const diffAbs = genDiff(
+        getFixturePath(`file1.${fileFormat}`),
+        getFixturePath(`file2.${fileFormat}`)
+      );
+      expect(diffAbs).toBe(plainDiff);
+    }
+  );
 
+  test.each([
+    ['stylish', 'diff_stylish.txt'],
+    ['plain', 'diff_plain.txt'],
+    ['json', 'diff_json.json'],
+  ])('should support %s output format', (outputFormat, fixtureFile) => {
+    const expectedDiff = readFixtureFile(fixtureFile);
+    const diff = genDiff(
+      getFixturePath('file3.json'),
+      getFixturePath('file4.json'),
+      outputFormat
+    );
+
+    if (outputFormat === 'json') {
+      // Parse diffs to make test output more helpful in case of failure.
+      expect(JSON.parse(diff, null, 2)).toStrictEqual(
+        JSON.parse(expectedDiff, null, 2)
+      );
+    } else {
+      expect(diff).toBe(expectedDiff);
+    }
+  });
 
   test('should work with relative file paths', () => {
     const diff = genDiff(
@@ -33,41 +55,7 @@ describe('genDiff', () => {
     expect(diff).toBe(plainDiff);
   });
 
-
-  test('diff for nested files in stylish format', () => {
-    const stylishDiff = readFixtureFile('diff_stylish.txt')
-
-    const diffAbs = genDiff(
-      getFixturePath(`file3.json`),
-      getFixturePath(`file4.json`),
-    );
-
-    expect(diffAbs).toBe(stylishDiff);
-  });
-
-  test('diff for nested files in plain format', () => {
-    const diffPlain = readFixtureFile('diff_plain.txt');
-    const diff = genDiff(
-      getFixturePath(`file3.json`),
-      getFixturePath(`file4.json`),
-      'plain'
-    );
-
-    expect(diff).toBe(diffPlain);
-  } );
-
-  test('diff for nested files in json format', () => {
-    const expectedDiff = JSON.parse(readFixtureFile('diff_json.json'), null, 2);
-    const diff = genDiff(
-      getFixturePath(`file3.json`),
-      getFixturePath(`file4.json`),
-      'json'
-    );
-
-    expect(JSON.parse(diff, null, 2)).toStrictEqual(expectedDiff);
-  } );
-
-  test('throws when format is unknown', () => {
+  test('should throw when output format is unknown', () => {
     const f = () =>
       genDiff(
         getFixturePath(`file3.json`),
@@ -76,5 +64,5 @@ describe('genDiff', () => {
       );
 
     expect(f).toThrow("Unsupported format 'wrong-format'");
-  } );
+  });
 });
