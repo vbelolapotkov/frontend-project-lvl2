@@ -1,9 +1,16 @@
-/* globals fixturesPath */
+import { fileURLToPath } from 'url';
 import fs from 'fs';
 import path from 'path';
 import genDiff from '../src/index.js';
 
-const getFixturePath = (fileName) => path.resolve(fixturesPath, fileName);
+// Global constants __filename and __dirname are missing when ECMAScript modules are used.
+// Use the following as a workaround. Src: https://ru.hexlet.io/blog/posts/chto-takoe-__dirname-v-javascript
+/* eslint-disable no-underscore-dangle */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+/* eslint-enable no-underscore-dangle */
+
+const getFixturePath = (fileName) => path.resolve(__dirname, '../__fixtures__', fileName);
 const readFixtureFile = (fileName) => fs.readFileSync(getFixturePath(fileName), 'utf-8');
 
 describe('genDiff', () => {
