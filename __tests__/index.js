@@ -62,6 +62,12 @@ describe('genDiff', () => {
     expect(diff).toBe(plainDiff);
   });
 
+  test('should throw when config format is unknown', () => {
+    const f = () =>
+      genDiff(getFixturePath(`diff_plain.txt`), getFixturePath(`file1.json`));
+    expect(f).toThrow("Unsupported input format 'txt'.");
+  });
+
   test('should throw when output format is unknown', () => {
     const f = () =>
       genDiff(
