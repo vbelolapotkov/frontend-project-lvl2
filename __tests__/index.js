@@ -76,6 +76,6 @@ describe('genDiff', () => {
         'wrong-format'
       );
 
-    expect(f).toThrow("Unsupported format 'wrong-format'");
+    expect(f).toThrow("Unsupported output format 'wrong-format'");
   });
 });

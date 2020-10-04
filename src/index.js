@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import parseConfig from './parsers.js';
-import formatters from './formatters/index.js';
+import format from './formatters/index.js';
 
 // Node ES modules does not support named exports from lodash.
 const { isPlainObject } = _;
@@ -54,17 +54,12 @@ const readConfigFromFile = (filepath) => {
   return parseConfig(fileContent, format);
 };
 
-export default function genDiff(filepath1, filepath2, format = 'stylish') {
-  const formatDiff = formatters[format];
-  if (typeof formatDiff !== 'function') {
-    throw new Error(`Unsupported format '${format}'`);
-  }
-
+export default function genDiff(filepath1, filepath2, outputFormat = 'stylish') {
   const config1 = readConfigFromFile(filepath1);
   const config2 = readConfigFromFile(filepath2);
 
   const diff = {
     children: getObjectsDiff(config1, config2),
   };
-  return formatDiff(diff);
+  return format(diff, outputFormat);
 }
