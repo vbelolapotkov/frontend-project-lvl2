@@ -23,17 +23,18 @@ const composeDiffValueLines = (path, value, diffSymbol = '  ') => {
 const composeDiffLines = (diff, path = []) => {
   const currentPath = diff.key ? [...path, diff.key] : path;
 
-  if (diff.children && diff.children.length > 0) {
-    const keyStr = diff.key ? `${diff.key}: ` : '';
-    const indent = getIndent(currentPath);
-    return [
-      `${indent}${keyStr}{`,
-      ...diff.children.flatMap((child) => composeDiffLines(child, currentPath)),
-      `${indent}}`,
-    ];
-  }
-
   switch (diff.type) {
+    case 'nested': {
+        const keyStr = diff.key ? `${diff.key}: ` : '';
+        const indent = getIndent(currentPath);
+        return [
+          `${indent}${keyStr}{`,
+          ...diff.children.flatMap((child) =>
+            composeDiffLines(child, currentPath)
+          ),
+          `${indent}}`,
+        ];
+      }
     case 'added':
       return composeDiffValueLines(currentPath, diff.value, '+ ');
     case 'deleted':

@@ -12,6 +12,7 @@ const getObjectsDiff = (obj1, obj2) => {
     if (isPlainObject(value1) && isPlainObject(value2)) {
       return {
         key,
+        type: 'nested',
         children: getObjectsDiff(value1, value2),
       };
     }
@@ -52,6 +53,7 @@ const getObjectsDiff = (obj1, obj2) => {
 
 export default function makeDiffTree(data1, data2) {
   return {
+    type: 'nested',
     children: getObjectsDiff(data1, data2),
   };
 }

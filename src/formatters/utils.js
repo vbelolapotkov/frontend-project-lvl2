@@ -4,7 +4,7 @@ export function flatten(diffTree) {
   const iter = (diff, path) => {
     const currentPath = diff.key ? [...path, diff.key] : path;
 
-    if (diff.children && diff.children.length > 0) {
+    if (diff.type === 'nested') {
       return [...diff.children.flatMap((child) => iter(child, currentPath))];
     }
 
