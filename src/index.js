@@ -24,8 +24,8 @@ const getDiffType = (previousValue, currentValue) => {
 };
 
 const getObjectsDiff = (obj1, obj2) => {
-  const allKeys = Object.keys({ ...obj1, ...obj2 }).sort();
-  return allKeys.flatMap((key) => {
+  const sortedKeys = _.sortBy(_.union(Object.keys(obj1), Object.keys(obj2)));
+  return sortedKeys.flatMap((key) => {
     const value1 = obj1[key];
     const value2 = obj2[key];
 
