@@ -1,23 +1,7 @@
 import _ from 'lodash';
 
 // Node ES modules does not support named exports from lodash.
-const { isPlainObject } = _;
-
-const getDiffType = (previousValue, currentValue) => {
-  if (previousValue === currentValue) {
-    return 'unchanged';
-  }
-
-  if (previousValue !== undefined && currentValue === undefined) {
-    return 'deleted';
-  }
-
-  if (previousValue === undefined && currentValue !== undefined) {
-    return 'added';
-  }
-
-  return 'changed';
-};
+const { isPlainObject, has } = _;
 
 const getObjectsDiff = (obj1, obj2) => {
   const sortedKeys = _.sortBy(_.union(Object.keys(obj1), Object.keys(obj2)));
@@ -32,14 +16,36 @@ const getObjectsDiff = (obj1, obj2) => {
       };
     }
 
-    const type = getDiffType(value1, value2);
-    const diffNode = { key, type, value: value2 };
-
-    if (type !== 'unchanged') {
-      diffNode.prevValue = value1;
+    if (value1 === value2) {
+      return {
+        key,
+        type: 'unchanged',
+        value: value2,
+      }
     }
 
-    return diffNode;
+    if (has(obj1, key) && !has(obj2, key)) {
+      return {
+        key,
+        type: 'deleted',
+        prevValue: value1,
+      }
+    }
+
+    if (!has(obj1, key) && has(obj2, key)) {
+      return {
+        key,
+        type: 'added',
+        value: value2,
+      };
+    }
+
+    return {
+      key,
+      type: 'changed',
+      prevValue: value1,
+      value: value2,
+    }
   });
 };
 
