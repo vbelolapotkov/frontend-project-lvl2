@@ -1,53 +1,46 @@
 import _ from 'lodash';
 
-const getIndent = path => '    '.repeat(path.length);
-const setIndent = (str, path) => _.padStart(str, getIndent(path).length);
+const getIndent = depth => '    '.repeat(depth);
+const setIndent = (str, depth) => _.padStart(str, getIndent(depth).length);
 
-const composeDiffValueLines = (path, value, diffSymbol = '  ') => {
-  const key = _.last(path);
-  const indent = setIndent(diffSymbol, path);
+const composeDiffValueLines = (key, value, diffSymbol, depth) => {
   return _.isPlainObject(value)
     ? [
-        `${indent}${key}: {`,
+        `${setIndent(diffSymbol, depth)}${key}: {`,
         ...Object.keys(value).flatMap((objectKey) =>
-          composeDiffValueLines(
-            [...path, objectKey],
-            value[objectKey]
-          )
+          composeDiffValueLines(objectKey, value[objectKey], '  ', depth + 1)
         ),
-        `${getIndent(path)}}`,
+        `${getIndent(depth)}}`,
       ]
-    : [`${indent}${key}: ${value}`];
+    : [`${setIndent(diffSymbol, depth)}${key}: ${value}`];
 };
 
-const composeDiffLines = (diff, path = []) => {
-  const currentPath = diff.key ? [...path, diff.key] : path;
-
-  switch (diff.type) {
+const composeDiffLines = (node, depth = 0) => {
+  switch (node.type) {
     case 'nested': {
-        const keyStr = diff.key ? `${diff.key}: ` : '';
-        const indent = getIndent(currentPath);
+        const keyStr = node.key ? `${node.key}: ` : '';
+        const indent = getIndent(depth);
         return [
           `${indent}${keyStr}{`,
-          ...diff.children.flatMap((child) =>
-            composeDiffLines(child, currentPath)
+          ...node.children.flatMap((child) =>
+            composeDiffLines(child, depth + 1)
           ),
           `${indent}}`,
         ];
       }
     case 'added':
-      return composeDiffValueLines(currentPath, diff.value, '+ ');
+      return composeDiffValueLines(node.key, node.value, '+ ', depth);
     case 'deleted':
-      return composeDiffValueLines(currentPath, diff.prevValue, '- ');
+      return composeDiffValueLines(node.key, node.prevValue, '- ', depth);
     case 'changed':
       return [
-        ...composeDiffValueLines(currentPath, diff.prevValue, '- '),
-        ...composeDiffValueLines(currentPath, diff.value, '+ '),
+        ...composeDiffValueLines(node.key, node.prevValue, '- ', depth),
+        ...composeDiffValueLines(node.key, node.value, '+ ', depth),
       ];
     case 'unchanged':
-      return composeDiffValueLines(currentPath, diff.value);
+      return composeDiffValueLines(node.key, node.value, '  ', depth);
     default:
-      throw new Error(`Unexpected diff type: ${diff.type}.`);
+      throw new Error(`Unexpected diff type: ${node.type}.`);
   }
 };
 
