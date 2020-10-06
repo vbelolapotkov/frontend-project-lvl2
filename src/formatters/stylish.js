@@ -2,48 +2,64 @@ import _ from 'lodash';
 
 const DEFAULT_TAB = '  '; // two spaces
 
-const getIndent = (depth, tab = DEFAULT_TAB) => tab.repeat(depth);
-const padIndent = (str, depth) => depth > 0 ? _.padStart(str, getIndent(depth).length) : '';
+const composeIndent = (level, tab = DEFAULT_TAB) => tab.repeat(level);
 
-const composeDiffValueLines = (key = '', value, diffSymbol, depth) => {
-  return _.isPlainObject(value)
+const getIndent = (depth, tab) => {
+  // Add one tab from the previous level.
+  const level = Math.max(0, 2 * (depth - 1) + 1);
+  return composeIndent(level, tab);
+};
+
+const getClosingIndent = (depth, tab) => {
+  return composeIndent(2 * depth, tab);
+};
+
+const composeValueLines = (value, depth, nodeMappers) =>
+  _.isPlainObject(value)
     ? [
-        `${getIndent(depth)}${padIndent(diffSymbol, depth)}${key}: {`,
-        ...Object.keys(value).flatMap((objectKey) =>
-          composeDiffValueLines(objectKey, value[objectKey], '  ', depth + 1)
+        '{',
+        ...Object.keys(value).flatMap(
+          (key) => nodeMappers.unchanged({ key, value: value[key] }, depth + 1),
+          depth + 1
         ),
-        `${getIndent(depth)}${padIndent('  ', depth)}}`,
+        `${getClosingIndent(depth)}}`,
       ]
-    : [`${getIndent(depth)}${padIndent(diffSymbol, depth)}${key}: ${value}`];
+    : [value.toString()];
+
+const nodeMappers = {
+  nested: (node, depth, composeNodeLines) => {
+    const { key } = node;
+    return [
+      key ? `${getIndent(depth)}  ${key}: {` : `${getIndent(depth)}{`,
+      ...node.children.flatMap((child) => composeNodeLines(child, depth + 1)),
+      `${getClosingIndent(depth)}}`,
+    ];
+  },
+  added: ({ key = '', value }, depth) =>
+    `${getIndent(depth)}+ ${key}: ${composeValueLines(
+      value,
+      depth,
+      nodeMappers
+    ).join('\n')}`,
+  deleted: ({ key = '', prevValue }, depth) =>
+    `${getIndent(depth)}- ${key}: ${composeValueLines(
+      prevValue,
+      depth,
+      nodeMappers
+    ).join('\n')}`,
+  changed: (node, depth) => [
+    nodeMappers.deleted(node, depth),
+    nodeMappers.added(node, depth),
+  ],
+  unchanged: ({ key, value }, depth) =>
+    `${getIndent(depth)}  ${key}: ${composeValueLines(
+      value,
+      depth,
+      nodeMappers
+    ).join('\n')}`,
 };
 
-const composeDiffLines = (node, depth = 0) => {
-  switch (node.type) {
-    case 'nested': {
-        const keyStr = node.key ? `${node.key}: ` : '';
-        const indent = getIndent(depth);
-        return [
-          `${indent}${padIndent('  ', depth)}${keyStr}{`,
-          ...node.children.flatMap((child) =>
-            composeDiffLines(child, depth + 1)
-          ),
-          `${indent}${padIndent('  ', depth)}}`,
-        ];
-      }
-    case 'added':
-      return composeDiffValueLines(node.key, node.value, '+ ', depth);
-    case 'deleted':
-      return composeDiffValueLines(node.key, node.prevValue, '- ', depth);
-    case 'changed':
-      return [
-        ...composeDiffValueLines(node.key, node.prevValue, '- ', depth),
-        ...composeDiffValueLines(node.key, node.value, '+ ', depth),
-      ];
-    case 'unchanged':
-      return composeDiffValueLines(node.key, node.value, '  ', depth);
-    default:
-      throw new Error(`Unexpected diff type: ${node.type}.`);
-  }
-};
+const composeDiffLines = (node, depth = 0) =>
+  nodeMappers[node.type](node, depth, composeDiffLines);
 
 export default (diff) => composeDiffLines(diff).join('\n');
