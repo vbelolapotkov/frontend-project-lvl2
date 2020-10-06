@@ -1,18 +1,20 @@
 import _ from 'lodash';
 
-const getIndent = depth => '    '.repeat(depth);
-const setIndent = (str, depth) => _.padStart(str, getIndent(depth).length);
+const DEFAULT_TAB = '  '; // two spaces
 
-const composeDiffValueLines = (key, value, diffSymbol, depth) => {
+const getIndent = (depth, tab = DEFAULT_TAB) => tab.repeat(depth);
+const padIndent = (str, depth) => depth > 0 ? _.padStart(str, getIndent(depth).length) : '';
+
+const composeDiffValueLines = (key = '', value, diffSymbol, depth) => {
   return _.isPlainObject(value)
     ? [
-        `${setIndent(diffSymbol, depth)}${key}: {`,
+        `${getIndent(depth)}${padIndent(diffSymbol, depth)}${key}: {`,
         ...Object.keys(value).flatMap((objectKey) =>
           composeDiffValueLines(objectKey, value[objectKey], '  ', depth + 1)
         ),
-        `${getIndent(depth)}}`,
+        `${getIndent(depth)}${padIndent('  ', depth)}}`,
       ]
-    : [`${setIndent(diffSymbol, depth)}${key}: ${value}`];
+    : [`${getIndent(depth)}${padIndent(diffSymbol, depth)}${key}: ${value}`];
 };
 
 const composeDiffLines = (node, depth = 0) => {
@@ -21,11 +23,11 @@ const composeDiffLines = (node, depth = 0) => {
         const keyStr = node.key ? `${node.key}: ` : '';
         const indent = getIndent(depth);
         return [
-          `${indent}${keyStr}{`,
+          `${indent}${padIndent('  ', depth)}${keyStr}{`,
           ...node.children.flatMap((child) =>
             composeDiffLines(child, depth + 1)
           ),
-          `${indent}}`,
+          `${indent}${padIndent('  ', depth)}}`,
         ];
       }
     case 'added':
