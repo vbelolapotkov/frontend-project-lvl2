@@ -19,7 +19,9 @@ function composeChangeLine({ type, key, value, prevValue }) {
     case 'deleted':
       return `Property '${key}' was removed`;
     case 'changed':
-      return `Property '${key}' was updated. From ${valueToString( prevValue )} to ${valueToString(value)}`;
+      return `Property '${key}' was updated. From ${valueToString(
+        prevValue
+      )} to ${valueToString(value)}`;
     default:
       throw Error(`Unexpected diff type ${type}`);
   }

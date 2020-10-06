@@ -1,7 +1,7 @@
 #!/usr/bin/env node --experimental-json-modules --no-warnings
 import commander from 'commander';
 import packageConfig from '../package.json';
-import genDiff from '../src/index.js'
+import genDiff from '../src/index.js';
 
 const program = new commander.Command();
 

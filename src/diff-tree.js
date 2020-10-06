@@ -22,7 +22,7 @@ const getObjectsDiff = (obj1, obj2) => {
         key,
         type: 'unchanged',
         value: value2,
-      }
+      };
     }
 
     if (has(obj1, key) && !has(obj2, key)) {
@@ -30,7 +30,7 @@ const getObjectsDiff = (obj1, obj2) => {
         key,
         type: 'deleted',
         prevValue: value1,
-      }
+      };
     }
 
     if (!has(obj1, key) && has(obj2, key)) {
@@ -46,10 +46,9 @@ const getObjectsDiff = (obj1, obj2) => {
       type: 'changed',
       prevValue: value1,
       value: value2,
-    }
+    };
   });
 };
-
 
 export default function makeDiffTree(data1, data2) {
   return {

@@ -10,8 +10,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 /* eslint-enable no-underscore-dangle */
 
-const getFixturePath = (fileName) => path.resolve(__dirname, '../__fixtures__', fileName);
-const readFixtureFile = (fileName) => fs.readFileSync(getFixturePath(fileName), 'utf-8');
+const getFixturePath = (fileName) =>
+  path.resolve(__dirname, '../__fixtures__', fileName);
+const readFixtureFile = (fileName) =>
+  fs.readFileSync(getFixturePath(fileName), 'utf-8');
 
 describe('genDiff', () => {
   let plainDiff;

@@ -10,7 +10,7 @@ export function flatten(diffTree) {
 
     const pathKey = currentPath.join('.');
     return [{ ...diff, key: pathKey }];
-  }
+  };
 
   return iter(diffTree, []);
 }

@@ -6,7 +6,7 @@ import makeDiffTree from './diff-tree.js';
 
 const readConfigFromFile = (filepath) => {
   const absPath = path.resolve(process.cwd(), filepath);
-  const fileFormat = path.extname(absPath).slice(1); // Use file extension without . as a fileFormat.
+  const fileFormat = path.extname(absPath).slice(1);
   const fileContent = fs.readFileSync(absPath, 'utf-8');
   return parseConfig(fileContent, fileFormat);
 };
