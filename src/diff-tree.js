@@ -49,7 +49,7 @@ const getObjectsDiff = (obj1, obj2) => {
 
 const makeDiffTree = (data1, data2) => {
   return {
-    type: 'nested',
+    type: 'root',
     children: getObjectsDiff(data1, data2),
   };
 };

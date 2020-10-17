@@ -28,13 +28,19 @@ const valueToString = (value, depth, nodeMappers) => {
 };
 
 const nodeMappers = {
-  nested: (node, depth, composeNodeLines) => {
-    const { key } = node;
+  root: (node, depth, composeNodeLines) => {
     return [
-      key ? `${getIndent(depth)}  ${key}: {` : `${getIndent(depth)}{`,
+      '{',
       ...node.children.flatMap((child) => composeNodeLines(child, depth + 1)),
+      '}',
+    ].join('\n');
+  },
+  nested: ({ key, children }, depth, composeNodeLines) => {
+    return [
+      `${getIndent(depth)}  ${key}: {`,
+      ...children.flatMap((child) => composeNodeLines(child, depth + 1)),
       `${getClosingIndent(depth)}}`,
-    ];
+    ].join('\n');
   },
   added: ({ key = '', value }, depth) =>
     `${getIndent(depth)}+ ${key}: ${valueToString(value, depth, nodeMappers)}`,
@@ -55,4 +61,4 @@ const nodeMappers = {
 const composeDiffLines = (node, depth = 0) =>
   nodeMappers[node.type](node, depth, composeDiffLines);
 
-export default (diff) => composeDiffLines(diff).join('\n');
+export default (diff) => composeDiffLines(diff);
