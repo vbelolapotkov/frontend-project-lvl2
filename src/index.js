@@ -6,9 +6,9 @@ import makeDiffTree from './diff-tree.js';
 
 const readConfigFromFile = (filepath) => {
   const absPath = path.resolve(process.cwd(), filepath);
-  const fileFormat = path.extname(absPath).slice(1);
+  const dataFormat = path.extname(absPath).slice(1);
   const fileContent = fs.readFileSync(absPath, 'utf-8');
-  return parseConfig(fileContent, fileFormat);
+  return parseConfig(fileContent, dataFormat);
 };
 
 const genDiff = (filepath1, filepath2, outputFormat = 'stylish') => {
