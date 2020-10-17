@@ -14,17 +14,18 @@ const getClosingIndent = (depth, tab) => {
   return composeIndent(2 * depth, tab);
 };
 
-const composeValueLines = (value, depth, nodeMappers) =>
-  _.isPlainObject(value)
-    ? [
-        '{',
-        ...Object.keys(value).flatMap(
-          (key) => nodeMappers.unchanged({ key, value: value[key] }, depth + 1),
-          depth + 1
-        ),
-        `${getClosingIndent(depth)}}`,
-      ]
-    : [value.toString()];
+const valueToString = (value, depth, nodeMappers) => {
+  if (!_.isPlainObject(value)) {
+    return value.toString();
+  }
+
+  const lines = Object.keys(value).flatMap(
+    (key) => nodeMappers.unchanged({ key, value: value[key] }, depth + 1),
+    depth + 1
+  );
+
+  return `{\n${lines.join('\n')}\n${getClosingIndent(depth)}}`;
+};
 
 const nodeMappers = {
   nested: (node, depth, composeNodeLines) => {
@@ -36,27 +37,19 @@ const nodeMappers = {
     ];
   },
   added: ({ key = '', value }, depth) =>
-    `${getIndent(depth)}+ ${key}: ${composeValueLines(
-      value,
-      depth,
-      nodeMappers
-    ).join('\n')}`,
+    `${getIndent(depth)}+ ${key}: ${valueToString(value, depth, nodeMappers)}`,
   deleted: ({ key = '', prevValue }, depth) =>
-    `${getIndent(depth)}- ${key}: ${composeValueLines(
+    `${getIndent(depth)}- ${key}: ${valueToString(
       prevValue,
       depth,
       nodeMappers
-    ).join('\n')}`,
+    )}`,
   changed: (node, depth) => [
     nodeMappers.deleted(node, depth),
     nodeMappers.added(node, depth),
   ],
   unchanged: ({ key, value }, depth) =>
-    `${getIndent(depth)}  ${key}: ${composeValueLines(
-      value,
-      depth,
-      nodeMappers
-    ).join('\n')}`,
+    `${getIndent(depth)}  ${key}: ${valueToString(value, depth, nodeMappers)}`,
 };
 
 const composeDiffLines = (node, depth = 0) =>
