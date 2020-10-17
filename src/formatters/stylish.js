@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const DEFAULT_TAB = '  '; // two spaces
+const DEFAULT_TAB = ' '.repeat(2);
 
 const composeIndent = (level, tab = DEFAULT_TAB) => tab.repeat(level);
 
