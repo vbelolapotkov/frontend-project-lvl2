@@ -7,7 +7,7 @@ const parsers = {
   json: JSON.parse,
 };
 
-export default function parse(content, format = 'json') {
+export default function parse(content, format) {
   if (!parsers[format]) {
     throw new Error(
       `Unsupported input format '${format}'. Use one of the following input formats: ${Object.keys(
