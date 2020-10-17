@@ -1,5 +1,7 @@
 plugins:
   - import
+  - jest
+  - fp
 
 env:
   node: true
@@ -10,7 +12,12 @@ parserOptions:
 
 extends:
   - 'airbnb-base'
+  - "plugin:jest/recommended"
+  - "plugin:fp/recommended"
   - 'prettier'
 
 rules:
   import/extensions: 0
+  fp/no-throw: 0
+  fp/no-nil: 0
+  fp/no-unused-expression: 0

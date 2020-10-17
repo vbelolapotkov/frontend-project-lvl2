@@ -16,9 +16,11 @@ const readFixtureFile = (fileName) =>
   fs.readFileSync(getFixturePath(fileName), 'utf-8');
 
 describe('genDiff', () => {
+  // eslint-disable-next-line fp/no-let
   let plainDiff;
 
   beforeAll(() => {
+    // eslint-disable-next-line fp/no-mutation
     plainDiff = readFixtureFile('plain_diff.txt');
   });
 
