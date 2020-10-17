@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { flatten } from './utils.js';
 
-function valueToString(value) {
+const valueToString = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
@@ -10,9 +10,9 @@ function valueToString(value) {
     return `'${value}'`;
   }
   return value.toString();
-}
+};
 
-function composeChangeLine({ type, key, value, prevValue }) {
+const composeChangeLine = ({ type, key, value, prevValue }) => {
   switch (type) {
     case 'added':
       return `Property '${key}' was added with value: ${valueToString(value)}`;
@@ -25,7 +25,7 @@ function composeChangeLine({ type, key, value, prevValue }) {
     default:
       throw Error(`Unexpected diff type ${type}`);
   }
-}
+};
 
 export default (diff) =>
   flatten(diff)

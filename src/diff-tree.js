@@ -50,9 +50,11 @@ const getObjectsDiff = (obj1, obj2) => {
   });
 };
 
-export default function makeDiffTree(data1, data2) {
+const makeDiffTree = (data1, data2) => {
   return {
     type: 'nested',
     children: getObjectsDiff(data1, data2),
   };
-}
+};
+
+export default makeDiffTree;

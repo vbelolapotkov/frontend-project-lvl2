@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-export function flatten(diffTree) {
+export const flatten = (diffTree) => {
   const iter = (diff, path) => {
     const currentPath = diff.key ? [...path, diff.key] : path;
 
@@ -13,4 +13,4 @@ export function flatten(diffTree) {
   };
 
   return iter(diffTree, []);
-}
+};

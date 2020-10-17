@@ -8,10 +8,12 @@ const formatters = {
   json: formatJson,
 };
 
-export default function format(tree, outputFormat) {
+const format = (tree, outputFormat) => {
   if (!formatters[outputFormat]) {
     throw new Error(`Unsupported output format '${outputFormat}'`);
   }
 
   return formatters[outputFormat](tree);
-}
+};
+
+export default format;

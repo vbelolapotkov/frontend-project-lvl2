@@ -11,9 +11,11 @@ const readConfigFromFile = (filepath) => {
   return parseConfig(fileContent, fileFormat);
 };
 
-export default function genDiff(filepath1, filepath2, outputFormat = 'stylish') {
+const genDiff = (filepath1, filepath2, outputFormat = 'stylish') => {
   const config1 = readConfigFromFile(filepath1);
   const config2 = readConfigFromFile(filepath2);
   const diffTree = makeDiffTree(config1, config2);
   return format(diffTree, outputFormat);
-}
+};
+
+export default genDiff;
