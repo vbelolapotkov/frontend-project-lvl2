@@ -8,12 +8,12 @@
         {
           "key": "follow",
           "type": "added",
-          "value": false
+          "currentValue": false
         },
         {
           "key": "setting1",
           "type": "unchanged",
-          "value": "Value 1"
+          "currentValue": "Value 1"
         },
         {
           "key": "setting2",
@@ -24,19 +24,19 @@
           "key": "setting3",
           "type": "changed",
           "prevValue": true,
-          "value": {
+          "currentValue": {
             "key": "value"
           }
         },
         {
           "key": "setting4",
           "type": "added",
-          "value": "blah blah"
+          "currentValue": "blah blah"
         },
         {
           "key": "setting5",
           "type": "added",
-          "value": {
+          "currentValue": {
             "key5": "value5"
           }
         },
@@ -52,19 +52,19 @@
                   "key": "wow",
                   "type": "changed",
                   "prevValue": "too much",
-                  "value": "so much"
+                  "currentValue": "so much"
                 }
               ]
             },
             {
               "key": "key",
               "type": "unchanged",
-              "value": "value"
+              "currentValue": "value"
             },
             {
               "key": "ops",
               "type": "added",
-              "value": "vops"
+              "currentValue": "vops"
             }
           ]
         }
@@ -78,12 +78,12 @@
           "key": "baz",
           "type": "changed",
           "prevValue": "bas",
-          "value": "bars"
+          "currentValue": "bars"
         },
         {
           "key": "foo",
           "type": "unchanged",
-          "value": "bar"
+          "currentValue": "bar"
         },
         {
           "key": "nest",
@@ -91,7 +91,7 @@
           "prevValue": {
             "key": "value"
           },
-          "value": "str"
+          "currentValue": "str"
         }
       ]
     },
@@ -108,7 +108,7 @@
     {
       "key": "group3",
       "type": "added",
-      "value": {
+      "currentValue": {
         "fee": 100500,
         "deep": {
           "id": {

@@ -12,16 +12,16 @@ const valueToString = (value) => {
   return value.toString();
 };
 
-const composeChangeLine = ({ type, key, value, prevValue }) => {
+const composeChangeLine = ({ type, key, currentValue, prevValue }) => {
   switch (type) {
     case 'added':
-      return `Property '${key}' was added with value: ${valueToString(value)}`;
+      return `Property '${key}' was added with value: ${valueToString(currentValue)}`;
     case 'deleted':
       return `Property '${key}' was removed`;
     case 'changed':
       return `Property '${key}' was updated. From ${valueToString(
         prevValue
-      )} to ${valueToString(value)}`;
+      )} to ${valueToString(currentValue)}`;
     default:
       throw Error(`Unexpected diff type ${type}`);
   }

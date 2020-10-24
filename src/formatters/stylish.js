@@ -20,7 +20,7 @@ const valueToString = (value, depth, nodeMappers) => {
   }
 
   const lines = Object.keys(value).flatMap(
-    (key) => nodeMappers.unchanged({ key, value: value[key] }, depth + 1),
+    (key) => nodeMappers.unchanged({ key, currentValue: value[key] }, depth + 1),
     depth + 1
   );
 
@@ -42,8 +42,8 @@ const nodeMappers = {
       `${getClosingIndent(depth)}}`,
     ].join('\n');
   },
-  added: ({ key = '', value }, depth) =>
-    `${getIndent(depth)}+ ${key}: ${valueToString(value, depth, nodeMappers)}`,
+  added: ({ key, currentValue }, depth) =>
+    `${getIndent(depth)}+ ${key}: ${valueToString(currentValue, depth, nodeMappers)}`,
   deleted: ({ key = '', prevValue }, depth) =>
     `${getIndent(depth)}- ${key}: ${valueToString(
       prevValue,
@@ -54,8 +54,8 @@ const nodeMappers = {
     nodeMappers.deleted(node, depth),
     nodeMappers.added(node, depth),
   ],
-  unchanged: ({ key, value }, depth) =>
-    `${getIndent(depth)}  ${key}: ${valueToString(value, depth, nodeMappers)}`,
+  unchanged: ({ key, currentValue }, depth) =>
+    `${getIndent(depth)}  ${key}: ${valueToString(currentValue, depth, nodeMappers)}`,
 };
 
 const composeDiffLines = (node, depth = 0) =>

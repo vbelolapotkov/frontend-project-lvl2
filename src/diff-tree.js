@@ -10,7 +10,7 @@ const getObjectsDiff = (obj1, obj2) => {
       return {
         key,
         type: 'added',
-        value: obj2[key],
+        currentValue: obj2[key],
       };
     }
 
@@ -34,7 +34,7 @@ const getObjectsDiff = (obj1, obj2) => {
       return {
         key,
         type: 'unchanged',
-        value: obj2[key],
+        currentValue: obj2[key],
       };
     }
 
@@ -42,7 +42,7 @@ const getObjectsDiff = (obj1, obj2) => {
       key,
       type: 'changed',
       prevValue: obj1[key],
-      value: obj2[key],
+      currentValue: obj2[key],
     };
   });
 };
